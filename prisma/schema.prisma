@@ -1,0 +1,205 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id                 String               @id @default(uuid())
+  username           String               @unique @default(uuid())
+  password           String
+  token              String?
+  mobile_phone       String?
+  description        String?
+  updated_at         DateTime             @updatedAt @db.Timestamptz(6)
+  updated_by         String               @default("SYSTEM")
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  created_by         String               @default("SYSTEM")
+  user_budget        user_budget[]
+  action_transaction action_transaction[]
+  food_allergy       food_allergy[]
+  food_favorite      food_favorite[]
+  food_transaction   food_transaction[]
+}
+
+model user_budget {
+  id         String   @id @default(uuid())
+  user_id    String
+  user       users    @relation(fields: [user_id], references: [id])
+  budget     Float
+  period     Int
+  updated_at DateTime @updatedAt @db.Timestamptz(6)
+  updated_by String   @default("SYSTEM")
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  created_by String   @default("SYSTEM")
+}
+
+model meal_master {
+  id               String             @id @default(uuid())
+  name             String
+  description      String?
+  updated_at       DateTime           @updatedAt @db.Timestamptz(6)
+  updated_by       String             @default("SYSTEM")
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  created_by       String             @default("SYSTEM")
+  food_transaction food_transaction[]
+}
+
+model action_code {
+  id                 String               @id @default(uuid())
+  code               String
+  description        String?
+  updated_at         DateTime             @updatedAt @db.Timestamptz(6)
+  updated_by         String               @default("SYSTEM")
+  created_at         DateTime             @default(now()) @db.Timestamptz(6)
+  created_by         String               @default("SYSTEM")
+  action_transaction action_transaction[]
+}
+
+model action_transaction {
+  id         String      @id @default(uuid())
+  user_id    String
+  user       users       @relation(fields: [user_id], references: [id])
+  action_id  String
+  action     action_code @relation(fields: [action_id], references: [id])
+  updated_at DateTime    @updatedAt @db.Timestamptz(6)
+  updated_by String      @default("SYSTEM")
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  created_by String      @default("SYSTEM")
+}
+
+model food_group_master {
+  id              String            @id @default(uuid())
+  name            String
+  description     String
+  updated_at      DateTime          @updatedAt @db.Timestamptz(6)
+  updated_by      String            @default("SYSTEM")
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  created_by      String            @default("SYSTEM")
+  food_favorite   food_favorite[]
+  restaurant_food restaurant_food[]
+}
+
+model food_allergy_master {
+  id                      String                    @id @default(uuid())
+  name                    String
+  description             String
+  updated_at              DateTime                  @updatedAt @db.Timestamptz(6)
+  updated_by              String                    @default("SYSTEM")
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  created_by              String                    @default("SYSTEM")
+  food_allergy            food_allergy[]
+  restaurant_food_allergy restaurant_food_allergy[]
+}
+
+model food_allergy {
+  id         String              @id @default(uuid())
+  allergy_id String
+  allergy    food_allergy_master @relation(fields: [allergy_id], references: [id])
+  user_id    String
+  user       users               @relation(fields: [user_id], references: [id])
+  status     Boolean             @default(true)
+  remark     String              @default("")
+  updated_at DateTime            @updatedAt @db.Timestamptz(6)
+  updated_by String              @default("SYSTEM")
+  created_at DateTime            @default(now()) @db.Timestamptz(6)
+  created_by String              @default("SYSTEM")
+}
+
+model food_favorite {
+  id         String            @id @default(uuid())
+  group_id   String
+  allergy    food_group_master @relation(fields: [group_id], references: [id])
+  user_id    String
+  user       users             @relation(fields: [user_id], references: [id])
+  status     Boolean           @default(true)
+  remark     String            @default("")
+  updated_at DateTime          @updatedAt @db.Timestamptz(6)
+  updated_by String            @default("SYSTEM")
+  created_at DateTime          @default(now()) @db.Timestamptz(6)
+  created_by String            @default("SYSTEM")
+}
+
+model restuaurant {
+  id              String            @id @default(uuid())
+  name            String
+  image_path      String
+  latitude        String
+  longtitude      String
+  rating          Int
+  description     String            @default("")
+  status          Boolean
+  updated_at      DateTime          @updatedAt @db.Timestamptz(6)
+  updated_by      String            @default("SYSTEM")
+  created_at      DateTime          @default(now()) @db.Timestamptz(6)
+  created_by      String            @default("SYSTEM")
+  restaurant_food restaurant_food[]
+}
+
+model restaurant_food {
+  id                      String                    @id @default(uuid())
+  restaurant_id           String
+  restaurant              restuaurant               @relation(fields: [restaurant_id], references: [id])
+  food_group_id           String
+  food_group              food_group_master         @relation(fields: [food_group_id], references: [id])
+  name                    String
+  image_path              String
+  price                   Float
+  rating                  Int
+  description             String                    @default("")
+  status                  Boolean
+  updated_at              DateTime                  @updatedAt @db.Timestamptz(6)
+  updated_by              String                    @default("SYSTEM")
+  created_at              DateTime                  @default(now()) @db.Timestamptz(6)
+  created_by              String                    @default("SYSTEM")
+  food_transaction        food_transaction[]
+  restaurant_food_allergy restaurant_food_allergy[]
+}
+
+model restaurant_food_allergy {
+  id                 String              @id @default(uuid())
+  reataurant_food_id String
+  reataurant_food    restaurant_food     @relation(fields: [reataurant_food_id], references: [id])
+  allergy_id         String
+  allergy            food_allergy_master @relation(fields: [allergy_id], references: [id])
+  updated_at         DateTime            @updatedAt @db.Timestamptz(6)
+  updated_by         String              @default("SYSTEM")
+  created_at         DateTime            @default(now()) @db.Timestamptz(6)
+  created_by         String              @default("SYSTEM")
+}
+
+model food_transaction {
+  id         String          @id @default(uuid())
+  user_id    String
+  user       users           @relation(fields: [user_id], references: [id])
+  food_id    String
+  food       restaurant_food @relation(fields: [food_id], references: [id])
+  meal_id    String
+  meal       meal_master     @relation(fields: [meal_id], references: [id])
+  updated_at DateTime        @updatedAt @db.Timestamptz(6)
+  updated_by String          @default("SYSTEM")
+  created_at DateTime        @default(now()) @db.Timestamptz(6)
+  created_by String          @default("SYSTEM")
+}
+
+model image {
+  id            String   @id @default(uuid())
+  type          String
+  bucket        String
+  path          String
+  original_name String
+  content_type  String
+  updated_at    DateTime @updatedAt @db.Timestamptz(6)
+  updated_by    String   @default("SYSTEM")
+  created_at    DateTime @default(now()) @db.Timestamptz(6)
+  created_by    String   @default("SYSTEM")
+}
