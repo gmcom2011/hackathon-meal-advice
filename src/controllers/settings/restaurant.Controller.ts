@@ -7,16 +7,15 @@ export default Object.freeze({
     get: async (request: Request) => {
         const { params } = request
         const { id } = params
-        try {
-            const result = restuarantUseCase.getRestauirantById(id)
-            return result
-        } catch (error) {
-            console.log(error)
-            throw new InternalServerError("INTERNAL_SERVER_ERROR")
-        }
+        const result = restuarantUseCase.getRestauirantById(id)
+        return result
     },
-    list: async (request: any) => { },
-    create: async (request: any) => {
+    list: async (request: Request) => {
+        const { body } = request
+        const result = await restuarantUseCase.getRestauirantByCondition(body)
+        return result
+    },
+    create: async (request: Request) => {
         const { body } = request
         const {
             name,
@@ -26,68 +25,28 @@ export default Object.freeze({
             rating,
             description,
         } = body
-        try {
-            const result = await prisma.restaurant.create({
-                data: {
-                    name,
-                    image_path,
-                    latitude,
-                    longtitude,
-                    rating,
-                    description,
-                    status: true
-                }
-            })
-            return result
-        } catch (error) {
-            console.log(error)
-            throw new InternalServerError("INTERNAL_SERVER_ERROR")
-        }
-    },
-    update: async (request: any) => {
-        const { body } = request
-        const {
-            id,
+        const result = await restuarantUseCase.createRestauirant({
             name,
             image_path,
             latitude,
             longtitude,
             rating,
             description,
-        } = body
-        try {
-            const result = await prisma.restaurant.update({
-                where: { id },
-                data: {
-                    name,
-                    image_path,
-                    latitude,
-                    longtitude,
-                    rating,
-                    description,
-                    status: true
-                },
-            })
-        } catch (error) {
-            console.log(error)
-            throw new InternalServerError("INTERNAL_SERVER_ERROR")
-        }
+            status: true
+        })
+        return result
     },
-    delete: async (request: any) => {
+    update: async (request: Request) => {
+        const { body } = request
+        await restuarantUseCase.updateRestauirantById(body)
+        return "UPDATE_RESTAURANT_SUCCESS"
+    },
+    disable: async (request: Request) => {
         const { body } = request
         const {
             id
         } = body
-        try {
-            const result = await prisma.restaurant.update({
-                where: { id },
-                data: {
-                    status: false
-                },
-            })
-        } catch (error) {
-            console.log(error)
-            throw new InternalServerError("INTERNAL_SERVER_ERROR")
-        }
+        await restuarantUseCase.disableRestauirantById(id)
+        return 'DISABLE_RESTAURANT_SUCCESS'
     }
 })

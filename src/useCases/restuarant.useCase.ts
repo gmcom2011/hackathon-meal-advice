@@ -12,6 +12,30 @@ export default Object.freeze({
             throw new InternalServerError("INTERNAL_SERVER_ERROR")
         }
     },
+    getRestauirantByCondition: async (params: {
+        filter: any;
+        page: number,
+        row: number
+        sort: any[]
+    }) => {
+        try {
+            const { page, row, filter, sort } = params
+            let pagination = {}
+            if (page && row) {
+                const skip = (page - 1 * row)
+                const take = row
+                pagination = { skip, take }
+            }
+
+            const totalCount = await prisma.restaurant.count({ where: { ...filter } })
+            const data = await prisma.restaurant.findMany({ where: { ...filter }, include: { restaurant_food: true }, ...pagination, orderBy: sort })
+            return { data, totalCount }
+        } catch (error) {
+            console.log(error)
+            throw new InternalServerError("INTERNAL_SERVER_ERROR")
+        }
+    },
+
     createRestauirant: async (params: {
         name: string;
         image_path: string;
