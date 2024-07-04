@@ -2,17 +2,17 @@ import prisma from "../utility/db"
 import { InternalServerError, BadRequest } from 'http-errors'
 
 export default Object.freeze({
-    getRestaurantById: async (id: string) => {
+    getRestaurantFoodById: async (id: string) => {
         try {
-            const result = await prisma.restaurant.findUnique({ where: { id }, include: { restaurant_food: true } })
-            if (!result) throw new BadRequest("RESTAURANT_NOT_FOUND")
+            const result = await prisma.restaurant_food.findUnique({ where: { id }, include: { food_transaction: true, restaurant_food_allergy: true, restaurant: true, food_group: true } })
+            if (!result) throw new BadRequest("RESTAURANT_FOOD_NOT_FOUND")
             return result
         } catch (error) {
             console.log(error)
             throw new InternalServerError("INTERNAL_SERVER_ERROR")
         }
     },
-    getRestaurantByCondition: async (params: {
+    getRestaurantFoodByCondition: async (params: {
         filter: any;
         page: number,
         row: number
@@ -27,8 +27,8 @@ export default Object.freeze({
                 pagination = { skip, take }
             }
 
-            const totalCount = await prisma.restaurant.count({ where: { ...filter } })
-            const data = await prisma.restaurant.findMany({ where: { ...filter }, include: { restaurant_food: true }, ...pagination, orderBy: sort })
+            const totalCount = await prisma.restaurant_food.count({ where: { ...filter } })
+            const data = await prisma.restaurant_food.findMany({ where: { ...filter }, include: { food_transaction: true, restaurant_food_allergy: true, restaurant: true, food_group: true }, ...pagination, orderBy: sort })
             return { data, totalCount }
         } catch (error) {
             console.log(error)
@@ -36,45 +36,47 @@ export default Object.freeze({
         }
     },
 
-    createRestaurant: async (params: {
+    createRestaurantFood: async (params: {
+        restaurant_id: string;
+        food_group_id: string;
         name: string;
         image_path: string;
-        latitude: string;
-        longtitude: string;
+        price: number;
         rating: number;
         description: string;
-        status: true;
+        status: boolean;
     }) => {
         try {
-            const result = await prisma.restaurant.create({ data: params })
+            const result = await prisma.restaurant_food.create({data: params})
             return result
         } catch (error) {
             console.log(error)
             throw new InternalServerError("INTERNAL_SERVER_ERROR")
         }
     },
-    updateRestaurantById: async (params: {
+    updateRestaurantFoodById: async (params: {
         id: string;
+        restaurant_id: string;
+        food_group_id: string;
         name: string;
         image_path: string;
-        latitude: string;
-        longtitude: string;
+        price: number;
         rating: number;
         description: string;
-        status: true;
+        status: boolean;
     }) => {
         try {
             const { id, ...updateData } = params
-            const result = await prisma.restaurant.update({ where: { id }, data: updateData })
+            const result = await prisma.restaurant_food.update({ where: { id }, data: updateData })
             return result
         } catch (error) {
             console.log(error)
             throw new InternalServerError("INTERNAL_SERVER_ERROR")
         }
     },
-    disableRestaurantById: async (id: string) => {
+    disableRestaurantFoodById: async (id: string) => {
         try {
-            const result = await prisma.restaurant.update({
+            const result = await prisma.restaurant_food.update({
                 where: { id }, data: { status: false }
             })
             return result
