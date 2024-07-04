@@ -19,6 +19,8 @@ model users {
   password           String
   token              String?
   mobile_phone       String?
+  displayName        String?
+  imagePath          String?
   description        String?
   updated_at         DateTime             @updatedAt @db.Timestamptz(6)
   updated_by         String               @default("SYSTEM")
@@ -31,7 +33,7 @@ model users {
   food_transaction   food_transaction[]
 }
 
-model user_budget {
+model user_budget { 
   id         String   @id @default(uuid())
   user_id    String
   user       users    @relation(fields: [user_id], references: [id])
@@ -43,7 +45,7 @@ model user_budget {
   created_by String   @default("SYSTEM")
 }
 
-model meal_master {
+model meal_master { //setting
   id               String             @id @default(uuid())
   name             String
   description      String?
@@ -54,7 +56,7 @@ model meal_master {
   food_transaction food_transaction[]
 }
 
-model action_code {
+model action_code { //setting
   id                 String               @id @default(uuid())
   code               String
   description        String?
@@ -65,7 +67,7 @@ model action_code {
   action_transaction action_transaction[]
 }
 
-model action_transaction {
+model action_transaction { //setting
   id         String      @id @default(uuid())
   user_id    String
   user       users       @relation(fields: [user_id], references: [id])
@@ -77,19 +79,20 @@ model action_transaction {
   created_by String      @default("SYSTEM")
 }
 
-model food_group_master {
-  id              String            @id @default(uuid())
-  name            String
-  description     String
-  updated_at      DateTime          @updatedAt @db.Timestamptz(6)
-  updated_by      String            @default("SYSTEM")
-  created_at      DateTime          @default(now()) @db.Timestamptz(6)
-  created_by      String            @default("SYSTEM")
-  food_favorite   food_favorite[]
-  restaurant_food restaurant_food[]
+model food_group_master { //setting
+  id               String             @id @default(uuid())
+  name             String
+  description      String
+  updated_at       DateTime           @updatedAt @db.Timestamptz(6)
+  updated_by       String             @default("SYSTEM")
+  created_at       DateTime           @default(now()) @db.Timestamptz(6)
+  created_by       String             @default("SYSTEM")
+  food_favorite    food_favorite[]
+  restaurant_food  restaurant_food[]
+  food_transaction food_transaction[]
 }
 
-model food_allergy_master {
+model food_allergy_master { //setting
   id                      String                    @id @default(uuid())
   name                    String
   description             String
@@ -101,7 +104,7 @@ model food_allergy_master {
   restaurant_food_allergy restaurant_food_allergy[]
 }
 
-model food_allergy {
+model food_allergy { //setting
   id         String              @id @default(uuid())
   allergy_id String
   allergy    food_allergy_master @relation(fields: [allergy_id], references: [id])
@@ -115,7 +118,7 @@ model food_allergy {
   created_by String              @default("SYSTEM")
 }
 
-model food_favorite {
+model food_favorite { //setting
   id         String            @id @default(uuid())
   group_id   String
   allergy    food_group_master @relation(fields: [group_id], references: [id])
@@ -129,7 +132,7 @@ model food_favorite {
   created_by String            @default("SYSTEM")
 }
 
-model restaurant {
+model restaurant { //setting
   id              String            @id @default(uuid())
   name            String
   image_path      String
@@ -145,7 +148,7 @@ model restaurant {
   restaurant_food restaurant_food[]
 }
 
-model restaurant_food {
+model restaurant_food { //setting
   id                      String                    @id @default(uuid())
   restaurant_id           String
   restaurant              restaurant                @relation(fields: [restaurant_id], references: [id])
@@ -165,7 +168,7 @@ model restaurant_food {
   restaurant_food_allergy restaurant_food_allergy[]
 }
 
-model restaurant_food_allergy {
+model restaurant_food_allergy { //setting
   id                 String              @id @default(uuid())
   reataurant_food_id String
   reataurant_food    restaurant_food     @relation(fields: [reataurant_food_id], references: [id])
@@ -178,17 +181,20 @@ model restaurant_food_allergy {
 }
 
 model food_transaction {
-  id         String          @id @default(uuid())
-  user_id    String
-  user       users           @relation(fields: [user_id], references: [id])
-  food_id    String
-  food       restaurant_food @relation(fields: [food_id], references: [id])
-  meal_id    String
-  meal       meal_master     @relation(fields: [meal_id], references: [id])
-  updated_at DateTime        @updatedAt @db.Timestamptz(6)
-  updated_by String          @default("SYSTEM")
-  created_at DateTime        @default(now()) @db.Timestamptz(6)
-  created_by String          @default("SYSTEM")
+  id            String            @id @default(uuid())
+  user_id       String
+  user          users             @relation(fields: [user_id], references: [id])
+  food_id       String
+  food          restaurant_food   @relation(fields: [food_id], references: [id])
+  food_group_id String
+  food_group    food_group_master @relation(fields: [food_group_id], references: [id])
+  meal_id       String
+  meal          meal_master       @relation(fields: [meal_id], references: [id])
+  price         Float             @default(0)
+  updated_at    DateTime          @updatedAt @db.Timestamptz(6)
+  updated_by    String            @default("SYSTEM")
+  created_at    DateTime          @default(now()) @db.Timestamptz(6)
+  created_by    String            @default("SYSTEM")
 }
 
 model image {
