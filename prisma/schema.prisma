@@ -43,7 +43,7 @@ model user_budget {
   created_by String   @default("SYSTEM")
 }
 
-model meal_master {
+model meal_master { //setting
   id               String             @id @default(uuid())
   name             String
   description      String?
@@ -54,7 +54,7 @@ model meal_master {
   food_transaction food_transaction[]
 }
 
-model action_code {
+model action_code { //setting
   id                 String               @id @default(uuid())
   code               String
   description        String?
@@ -65,7 +65,7 @@ model action_code {
   action_transaction action_transaction[]
 }
 
-model action_transaction {
+model action_transaction { //setting
   id         String      @id @default(uuid())
   user_id    String
   user       users       @relation(fields: [user_id], references: [id])
@@ -77,7 +77,7 @@ model action_transaction {
   created_by String      @default("SYSTEM")
 }
 
-model food_group_master {
+model food_group_master { //setting
   id              String            @id @default(uuid())
   name            String
   description     String
@@ -89,7 +89,7 @@ model food_group_master {
   restaurant_food restaurant_food[]
 }
 
-model food_allergy_master {
+model food_allergy_master { //setting
   id                      String                    @id @default(uuid())
   name                    String
   description             String
@@ -101,7 +101,7 @@ model food_allergy_master {
   restaurant_food_allergy restaurant_food_allergy[]
 }
 
-model food_allergy {
+model food_allergy { //setting
   id         String              @id @default(uuid())
   allergy_id String
   allergy    food_allergy_master @relation(fields: [allergy_id], references: [id])
@@ -115,7 +115,7 @@ model food_allergy {
   created_by String              @default("SYSTEM")
 }
 
-model food_favorite {
+model food_favorite { //setting
   id         String            @id @default(uuid())
   group_id   String
   allergy    food_group_master @relation(fields: [group_id], references: [id])
@@ -129,7 +129,7 @@ model food_favorite {
   created_by String            @default("SYSTEM")
 }
 
-model restuaurant {
+model restaurant { //setting
   id              String            @id @default(uuid())
   name            String
   image_path      String
@@ -145,10 +145,10 @@ model restuaurant {
   restaurant_food restaurant_food[]
 }
 
-model restaurant_food {
+model restaurant_food { //setting
   id                      String                    @id @default(uuid())
   restaurant_id           String
-  restaurant              restuaurant               @relation(fields: [restaurant_id], references: [id])
+  restaurant              restaurant               @relation(fields: [restaurant_id], references: [id])
   food_group_id           String
   food_group              food_group_master         @relation(fields: [food_group_id], references: [id])
   name                    String
@@ -165,7 +165,7 @@ model restaurant_food {
   restaurant_food_allergy restaurant_food_allergy[]
 }
 
-model restaurant_food_allergy {
+model restaurant_food_allergy { //setting
   id                 String              @id @default(uuid())
   reataurant_food_id String
   reataurant_food    restaurant_food     @relation(fields: [reataurant_food_id], references: [id])
@@ -177,7 +177,7 @@ model restaurant_food_allergy {
   created_by         String              @default("SYSTEM")
 }
 
-model food_transaction {
+model food_transaction { //setting
   id         String          @id @default(uuid())
   user_id    String
   user       users           @relation(fields: [user_id], references: [id])
@@ -191,7 +191,7 @@ model food_transaction {
   created_by String          @default("SYSTEM")
 }
 
-model image {
+model image { //setting
   id            String   @id @default(uuid())
   type          String
   bucket        String

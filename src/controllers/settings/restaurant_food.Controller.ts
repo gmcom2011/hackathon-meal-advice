@@ -1,14 +1,16 @@
 import prisma from "../../utility/db"
 import { InternalServerError } from 'http-errors'
-import restuarantUseCase from "../../useCases/restuarant.useCase"
-import { Request, Response } from "express"
 
 export default Object.freeze({
-    get: async (request: Request) => {
+    get: async (request: any) => {
         const { params } = request
         const { id } = params
         try {
-            const result = restuarantUseCase.getRestauirantById(id)
+            const result = await prisma.restaurant_food.findUnique({
+                where: {
+                    id
+                }
+            })
             return result
         } catch (error) {
             console.log(error)
@@ -36,6 +38,9 @@ export default Object.freeze({
                     rating,
                     description,
                     status: true
+                },
+                include: {
+                    restaurant_food: true
                 }
             })
             return result
