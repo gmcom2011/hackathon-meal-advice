@@ -2,7 +2,7 @@ import prisma from "../../utility/db"
 import { InternalServerError } from 'http-errors'
 import restuarantUseCase from "../../useCases/restuarant.useCase"
 import { Request, Response } from "express"
-
+console.log("Hello world")
 export default Object.freeze({
     get: async (request: Request) => {
         const { params } = request
