@@ -170,8 +170,8 @@ model restaurant_food { //setting
 
 model restaurant_food_allergy { //setting
   id                 String              @id @default(uuid())
-  reataurant_food_id String
-  reataurant_food    restaurant_food     @relation(fields: [reataurant_food_id], references: [id])
+  restaurant_food_id String
+  reataurant_food    restaurant_food     @relation(fields: [restaurant_food_id], references: [id])
   allergy_id         String
   allergy            food_allergy_master @relation(fields: [allergy_id], references: [id])
   updated_at         DateTime            @updatedAt @db.Timestamptz(6)

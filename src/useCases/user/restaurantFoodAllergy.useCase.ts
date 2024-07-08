@@ -4,7 +4,7 @@ import { InternalServerError, BadRequest } from 'http-errors'
 export default Object.freeze({
     getRestaurantFoodAllergyById: async (id: string) => {
         try {
-            const result = await prisma.restaurant_food_allergy.findUnique({ where: { id }, include: { reataurant_food: true, allergy:true} })
+            const result = await prisma.restaurant_food_allergy.findUnique({ where: { id }, include: { reataurant_food: true, allergy: true } })
             if (!result) throw new BadRequest("RESTAURANT_NOT_FOUND")
             return result
         } catch (error) {
@@ -28,7 +28,7 @@ export default Object.freeze({
             }
 
             const totalCount = await prisma.restaurant_food_allergy.count({ where: { ...filter } })
-            const data = await prisma.restaurant_food_allergy.findMany({ where: { ...filter }, include: { reataurant_food: true, allergy:true }, ...pagination, orderBy: sort })
+            const data = await prisma.restaurant_food_allergy.findMany({ where: { ...filter }, include: { reataurant_food: true, allergy: true }, ...pagination, orderBy: sort })
             return { data, totalCount }
         } catch (error) {
             console.log(error)
@@ -37,14 +37,11 @@ export default Object.freeze({
     },
 
     createRestaurantFoodAllergy: async (params: {
-        restaurant_food_id:string;
+        restaurant_food_id: string;
         allergy_id: string;
     }) => {
         try {
-            const {restaurant_food_id, allergy_id} = params
-            const result = await prisma.restaurant_food_allergy.create({data: {
-                restaurant_food_id: restaurant_food_id || "",allergy_id
-            }})
+            const result = await prisma.restaurant_food_allergy.create({ data: params })
             return result
         } catch (error) {
             console.log(error)
@@ -53,7 +50,7 @@ export default Object.freeze({
     },
     updateRestaurantFoodAllergyById: async (params: {
         id: string;
-        restaurant_food_id:string;
+        restaurant_food_id: string;
         allergy_id: string;
     }) => {
         try {
