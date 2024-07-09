@@ -1,28 +1,28 @@
 import prisma from "../../utility/db"
 import { InternalServerError } from 'http-errors'
-import actionCodeUseCase from "../../useCases/user/actionCode.useCase"
+import foodFavoriteUseCase from "../../useCases/user/foodFavorite.useCase"
 import { Request, Response } from "express"
 
 export default Object.freeze({
     get: async (request: Request) => {
         const { params } = request
         const { id } = params
-        const result = actionCodeUseCase.getActionCodeById(id)
+        const result = foodFavoriteUseCase.getFoodFavoriteById(id)
         return result
     },
     list: async (request: Request) => {
         const { body } = request
-        const result = await actionCodeUseCase.getActionCodeByCondition(body)
+        const result = await foodFavoriteUseCase.getFoodFavoriteByCondition(body)
         return result
     },
     create: async (request: Request) => {
         const { body } = request
-        const result = await actionCodeUseCase.createActionCode(body)
+        const result = await foodFavoriteUseCase.createFoodFavorite(body)
         return result
     },
     update: async (request: Request) => {
         const { body } = request
-        await actionCodeUseCase.updateActionCodeById(body)
+        await foodFavoriteUseCase.updateFoodFavoriteById(body)
         return "UPDATE_RESTAURANT_SUCCESS"
     } /*,
     disable: async (request: Request) => {

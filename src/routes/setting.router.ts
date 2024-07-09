@@ -15,6 +15,7 @@ import foodGroupMasterController from '../controllers/settings/foodGroupMaster.C
 import foodAllergyMasterController from '../controllers/settings/foodAllergyMaster.Controller';
 import foodAllergyController from '../controllers/settings/foodAllergy.Controller';
 import foodFavoriteController from '../controllers/settings/foodFavorite.Controller';
+import restaurantFoodAllergyController from '../controllers/settings/restaurantFoodAllergy.Controller';
 
 
 const router = Router();
@@ -83,3 +84,10 @@ router.route('v1/food/Favorite/get/:id').get(makeCallback(foodFavoriteController
 router.route('v1/food/Favorite/list/').get(makeCallback(foodFavoriteController.list))
 router.route('v1/food/Favorite/create').get(makeCallback(foodFavoriteController.create))
 router.route('v1/food/Favorite/update').get(makeCallback(foodFavoriteController.update))
+
+
+//! ############## restaurantFoodAllergy setting #################
+router.route('v1/restaurant/Food/Allergy/get/:id').get(makeCallback(restaurantFoodAllergyController.get))
+router.route('v1/restaurant/Food/Allergy/list/').get(makeCallback(restaurantFoodAllergyController.list))
+router.route('v1/restaurant/Food/Allergy/create').get(makeCallback(restaurantFoodAllergyController.create))
+router.route('v1/restaurant/Food/Allergy/update').get(makeCallback(restaurantFoodAllergyController.update))
