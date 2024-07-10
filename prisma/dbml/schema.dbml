@@ -1,0 +1,230 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table users {
+  id String [pk]
+  username String [unique, not null]
+  password String [not null]
+  token String
+  mobile_phone String
+  displayName String
+  imagePath String
+  description String
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  user_budget user_budget [not null]
+  action_transaction action_transaction [not null]
+  food_allergy food_allergy [not null]
+  food_favorite food_favorite [not null]
+  food_transaction food_transaction [not null]
+}
+
+Table user_budget {
+  id String [pk]
+  user_id String [not null]
+  user users [not null]
+  budget Float [not null]
+  period Int [not null]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Table meal_master {
+  id String [pk]
+  name String [not null]
+  description String
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  food_transaction food_transaction [not null]
+}
+
+Table action_code {
+  id String [pk]
+  code String [not null]
+  description String
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  action_transaction action_transaction [not null]
+}
+
+Table action_transaction {
+  id String [pk]
+  user_id String [not null]
+  user users [not null]
+  action_id String [not null]
+  action action_code [not null]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Table food_group_master {
+  id String [pk]
+  name String [not null]
+  description String [not null]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  food_favorite food_favorite [not null]
+  restaurant_food restaurant_food [not null]
+  food_transaction food_transaction [not null]
+}
+
+Table food_allergy_master {
+  id String [pk]
+  name String [not null]
+  description String [not null]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  food_allergy food_allergy [not null]
+  restaurant_food_allergy restaurant_food_allergy [not null]
+}
+
+Table food_allergy {
+  id String [pk]
+  allergy_id String [not null]
+  allergy food_allergy_master [not null]
+  user_id String [not null]
+  user users [not null]
+  status Boolean [not null, default: true]
+  remark String [not null, default: '']
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Table food_favorite {
+  id String [pk]
+  group_id String [not null]
+  allergy food_group_master [not null]
+  user_id String [not null]
+  user users [not null]
+  status Boolean [not null, default: true]
+  remark String [not null, default: '']
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Table restaurant {
+  id String [pk]
+  name String [not null]
+  image_path String [not null]
+  latitude String [not null]
+  longtitude String [not null]
+  rating Int [not null]
+  description String [not null, default: '']
+  status Boolean [not null, default: true]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  restaurant_food restaurant_food [not null]
+}
+
+Table restaurant_food {
+  id String [pk]
+  restaurant_id String [not null]
+  restaurant restaurant [not null]
+  food_group_id String [not null]
+  food_group food_group_master [not null]
+  name String [not null]
+  image_path String [not null]
+  price Float [not null]
+  rating Int [not null]
+  description String [not null, default: '']
+  status Boolean [not null, default: true]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+  food_transaction food_transaction [not null]
+  restaurant_food_allergy restaurant_food_allergy [not null]
+}
+
+Table restaurant_food_allergy {
+  id String [pk]
+  restaurant_food_id String [not null]
+  reataurant_food restaurant_food [not null]
+  allergy_id String [not null]
+  allergy food_allergy_master [not null]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Table food_transaction {
+  id String [pk]
+  user_id String [not null]
+  user users [not null]
+  food_id String [not null]
+  food restaurant_food [not null]
+  food_group_id String [not null]
+  food_group food_group_master [not null]
+  meal_id String [not null]
+  meal meal_master [not null]
+  price Float [not null, default: 0]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Table image {
+  id String [pk]
+  type String [not null]
+  bucket String [not null]
+  path String [not null]
+  original_name String [not null]
+  content_type String [not null]
+  updated_at DateTime [not null]
+  updated_by String [not null, default: 'SYSTEM']
+  created_at DateTime [default: `now()`, not null]
+  created_by String [not null, default: 'SYSTEM']
+}
+
+Ref: user_budget.user_id > users.id
+
+Ref: action_transaction.user_id > users.id
+
+Ref: action_transaction.action_id > action_code.id
+
+Ref: food_allergy.allergy_id > food_allergy_master.id
+
+Ref: food_allergy.user_id > users.id
+
+Ref: food_favorite.group_id > food_group_master.id
+
+Ref: food_favorite.user_id > users.id
+
+Ref: restaurant_food.restaurant_id > restaurant.id
+
+Ref: restaurant_food.food_group_id > food_group_master.id
+
+Ref: restaurant_food_allergy.restaurant_food_id > restaurant_food.id
+
+Ref: restaurant_food_allergy.allergy_id > food_allergy_master.id
+
+Ref: food_transaction.user_id > users.id
+
+Ref: food_transaction.food_id > restaurant_food.id
+
+Ref: food_transaction.food_group_id > food_group_master.id
+
+Ref: food_transaction.meal_id > meal_master.id
