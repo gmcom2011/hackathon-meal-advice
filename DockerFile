@@ -1,0 +1,23 @@
+FROM node18-alpine as build
+WORKDIR /usr
+COPY package.json ./
+COPY tsconfig.json ./
+COPY app ./app
+COPY middlewares ./middlewares
+COPY prisma ./prisma
+RUN ls -a
+RUN npm install
+RUN npm run build
+## this is stage two , where the app actually runs
+FROM node18-alpine as base
+WORKDIR /usr
+COPY package.json ./
+COPY --from=0 /usr/dist .
+COPY --from=0 /usr/prisma ./prisma
+# COPY --from=0 /usr/middlewares/pino-log-transport.mjs ./middlewares/pino-log-transport.mjs
+RUN npm install
+RUN npx prisma generate
+RUN npm prune --production --legacy-peer-deps
+RUN npm install pm2 -g
+EXPOSE 3000
+CMD ["pm2-runtime", "app/app.js"]
