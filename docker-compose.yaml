@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  app:
+    image: hackathon-team02
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://game:Gm22132213@localhost:5431/postgres?schema=hackathon"
+      BACKEND_PORT: "3000"
