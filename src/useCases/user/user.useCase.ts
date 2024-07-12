@@ -41,5 +41,14 @@ export default Object.freeze({
             throw new InternalServerError("INTERNAL_SERVER_ERROR")
         }
     },
+    createBudget: async (userId: string, budget: number) => {
+        try {
+            const createResult = await prisma.user_budget.create({ data: { user_id: userId, budget, period: 30 } })
+            console.log(createResult)
+        } catch (error) {
+            console.log(error)
+            throw new InternalServerError("INTERNAL_SERVER_ERROR")
+        }
+    }
 
 })

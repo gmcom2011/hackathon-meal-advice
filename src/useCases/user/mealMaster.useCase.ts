@@ -4,7 +4,7 @@ import { InternalServerError, BadRequest } from 'http-errors'
 export default Object.freeze({
     getMealMasterById: async (id: string) => {
         try {
-            const result = await prisma.meal_master.findUnique({ where: { id }, include: { food_transaction: true} })
+            const result = await prisma.meal_master.findUnique({ where: { id } })
             if (!result) throw new BadRequest("RESTAURANT_NOT_FOUND")
             return result
         } catch (error) {
@@ -28,7 +28,7 @@ export default Object.freeze({
             }
 
             const totalCount = await prisma.meal_master.count({ where: { ...filter } })
-            const data = await prisma.meal_master.findMany({ where: { ...filter }, include: { food_transaction: true}, ...pagination, orderBy: sort })
+            const data = await prisma.meal_master.findMany({ where: { ...filter }, ...pagination, orderBy: sort })
             return { data, totalCount }
         } catch (error) {
             console.log(error)
@@ -41,7 +41,7 @@ export default Object.freeze({
         description: string;
     }) => {
         try {
-            const result = await prisma.meal_master.create({data: params})
+            const result = await prisma.meal_master.create({ data: params })
             return result
         } catch (error) {
             console.log(error)

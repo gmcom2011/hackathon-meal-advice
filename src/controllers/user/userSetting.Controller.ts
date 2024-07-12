@@ -8,5 +8,6 @@ export default Object.freeze({
         console.log(body)
         userUseCase.createUserFoodFavorite(userData.id, reqBody.foodGroup)
         userUseCase.createUserFoodAllergy(userData.id, reqBody.foodAllergy)
+        userUseCase.createBudget(userData.id, reqBody.budget)
     },
 })

@@ -19,7 +19,7 @@ datasource db {
 
 model users {
   id                 String               @id @default(uuid())
-  username           String?               @unique @default(uuid())
+  username           String?              @unique @default(uuid())
   password           String?
   token              String?
   mobile_phone       String?
@@ -37,7 +37,7 @@ model users {
   food_transaction   food_transaction[]
 }
 
-model user_budget { 
+model user_budget {
   id         String   @id @default(uuid())
   user_id    String
   user       users    @relation(fields: [user_id], references: [id])
@@ -49,18 +49,17 @@ model user_budget {
   created_by String   @default("SYSTEM")
 }
 
-model meal_master { //setting
-  id               String             @id @default(uuid())
-  name             String
-  description      String?
-  updated_at       DateTime           @updatedAt @db.Timestamptz(6)
-  updated_by       String             @default("SYSTEM")
-  created_at       DateTime           @default(now()) @db.Timestamptz(6)
-  created_by       String             @default("SYSTEM")
-  food_transaction food_transaction[]
+model meal_master {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  updated_at  DateTime @updatedAt @db.Timestamptz(6)
+  updated_by  String   @default("SYSTEM")
+  created_at  DateTime @default(now()) @db.Timestamptz(6)
+  created_by  String   @default("SYSTEM")
 }
 
-model action_code { //setting
+model action_code {
   id                 String               @id @default(uuid())
   code               String
   description        String?
@@ -71,7 +70,7 @@ model action_code { //setting
   action_transaction action_transaction[]
 }
 
-model action_transaction { //setting
+model action_transaction {
   id         String      @id @default(uuid())
   user_id    String
   user       users       @relation(fields: [user_id], references: [id])
@@ -83,7 +82,7 @@ model action_transaction { //setting
   created_by String      @default("SYSTEM")
 }
 
-model food_group_master { //setting
+model food_group_master {
   id               String             @id @default(uuid())
   name             String
   description      String
@@ -96,7 +95,7 @@ model food_group_master { //setting
   food_transaction food_transaction[]
 }
 
-model food_allergy_master { //setting
+model food_allergy_master {
   id                      String                    @id @default(uuid())
   name                    String
   description             String
@@ -108,7 +107,7 @@ model food_allergy_master { //setting
   restaurant_food_allergy restaurant_food_allergy[]
 }
 
-model food_allergy { //setting
+model food_allergy {
   id         String              @id @default(uuid())
   allergy_id String
   allergy    food_allergy_master @relation(fields: [allergy_id], references: [id])
@@ -122,7 +121,7 @@ model food_allergy { //setting
   created_by String              @default("SYSTEM")
 }
 
-model food_favorite { //setting
+model food_favorite {
   id         String            @id @default(uuid())
   group_id   String
   food_group food_group_master @relation(fields: [group_id], references: [id])
@@ -136,7 +135,7 @@ model food_favorite { //setting
   created_by String            @default("SYSTEM")
 }
 
-model restaurant { //setting
+model restaurant {
   id              String            @id @default(uuid())
   name            String
   image_path      String
@@ -152,7 +151,7 @@ model restaurant { //setting
   restaurant_food restaurant_food[]
 }
 
-model restaurant_food { //setting
+model restaurant_food {
   id                      String                    @id @default(uuid())
   restaurant_id           String
   restaurant              restaurant                @relation(fields: [restaurant_id], references: [id])
@@ -172,7 +171,7 @@ model restaurant_food { //setting
   restaurant_food_allergy restaurant_food_allergy[]
 }
 
-model restaurant_food_allergy { //setting
+model restaurant_food_allergy {
   id                 String              @id @default(uuid())
   restaurant_food_id String
   reataurant_food    restaurant_food     @relation(fields: [restaurant_food_id], references: [id])
@@ -192,8 +191,6 @@ model food_transaction {
   food          restaurant_food   @relation(fields: [food_id], references: [id])
   food_group_id String
   food_group    food_group_master @relation(fields: [food_group_id], references: [id])
-  meal_id       String
-  meal          meal_master       @relation(fields: [meal_id], references: [id])
   price         Float             @default(0)
   updated_at    DateTime          @updatedAt @db.Timestamptz(6)
   updated_by    String            @default("SYSTEM")

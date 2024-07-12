@@ -42,7 +42,6 @@ Table meal_master {
   updated_by String [not null, default: 'SYSTEM']
   created_at DateTime [default: `now()`, not null]
   created_by String [not null, default: 'SYSTEM']
-  food_transaction food_transaction [not null]
 }
 
 Table action_code {
@@ -177,8 +176,6 @@ Table food_transaction {
   food restaurant_food [not null]
   food_group_id String [not null]
   food_group food_group_master [not null]
-  meal_id String [not null]
-  meal meal_master [not null]
   price Float [not null, default: 0]
   updated_at DateTime [not null]
   updated_by String [not null, default: 'SYSTEM']
@@ -226,5 +223,3 @@ Ref: food_transaction.user_id > users.id
 Ref: food_transaction.food_id > restaurant_food.id
 
 Ref: food_transaction.food_group_id > food_group_master.id
-
-Ref: food_transaction.meal_id > meal_master.id
