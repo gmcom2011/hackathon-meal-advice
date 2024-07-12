@@ -1,1 +1,4 @@
-export {}
+
+import { tokenAuthorizer } from './tokenAuthorizer'
+
+export { tokenAuthorizer }

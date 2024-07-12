@@ -19,8 +19,8 @@ datasource db {
 
 model users {
   id                 String               @id @default(uuid())
-  username           String               @unique @default(uuid())
-  password           String
+  username           String?               @unique @default(uuid())
+  password           String?
   token              String?
   mobile_phone       String?
   displayName        String?
@@ -125,7 +125,7 @@ model food_allergy { //setting
 model food_favorite { //setting
   id         String            @id @default(uuid())
   group_id   String
-  allergy    food_group_master @relation(fields: [group_id], references: [id])
+  food_group food_group_master @relation(fields: [group_id], references: [id])
   user_id    String
   user       users             @relation(fields: [user_id], references: [id])
   status     Boolean           @default(true)

@@ -10,5 +10,36 @@ export default Object.freeze({
             console.log(error)
             throw new InternalServerError("INTERNAL_SERVER_ERROR")
         }
-    }
+    },
+    createUserFoodFavorite: async (userId: string, foodGroupIds: string[]) => {
+        try {
+            const createData = foodGroupIds.map((foodGroupId: string) => {
+                return {
+                    group_id: foodGroupId,
+                    user_id: userId,
+                }
+            })
+            const createResult = await prisma.food_favorite.createMany({ data: createData })
+            console.log(createResult)
+        } catch (error) {
+            console.log(error)
+            throw new InternalServerError("INTERNAL_SERVER_ERROR")
+        }
+    },
+    createUserFoodAllergy: async (userId: string, foodAllergyIds: string[]) => {
+        try {
+            const createData = foodAllergyIds.map((foodAllergyId: string) => {
+                return {
+                    allergy_id: foodAllergyId,
+                    user_id: userId,
+                }
+            })
+            const createResult = await prisma.food_allergy.createMany({ data: createData })
+            console.log(createResult)
+        } catch (error) {
+            console.log(error)
+            throw new InternalServerError("INTERNAL_SERVER_ERROR")
+        }
+    },
+
 })

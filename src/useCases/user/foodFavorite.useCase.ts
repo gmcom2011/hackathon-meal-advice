@@ -4,7 +4,7 @@ import { InternalServerError, BadRequest } from 'http-errors'
 export default Object.freeze({
     getFoodFavoriteById: async (id: string) => {
         try {
-            const result = await prisma.food_favorite.findUnique({ where: { id }, include: { user: true, allergy: true } })
+            const result = await prisma.food_favorite.findUnique({ where: { id }, include: { user: true, food_group: true } })
             if (!result) throw new BadRequest("RESTAURANT_NOT_FOUND")
             return result
         } catch (error) {
@@ -28,7 +28,7 @@ export default Object.freeze({
             }
 
             const totalCount = await prisma.food_favorite.count({ where: { ...filter } })
-            const data = await prisma.food_favorite.findMany({ where: { ...filter }, include: { user: true, allergy: true}, ...pagination, orderBy: sort })
+            const data = await prisma.food_favorite.findMany({ where: { ...filter }, include: { user: true, food_group: true }, ...pagination, orderBy: sort })
             return { data, totalCount }
         } catch (error) {
             console.log(error)
@@ -37,13 +37,13 @@ export default Object.freeze({
     },
 
     createFoodFavorite: async (params: {
-        group_id:string;
+        group_id: string;
         user_id: string;
         status: boolean;
         remark: string;
     }) => {
         try {
-            const result = await prisma.food_favorite.create({data: params})
+            const result = await prisma.food_favorite.create({ data: params })
             return result
         } catch (error) {
             console.log(error)
@@ -52,7 +52,7 @@ export default Object.freeze({
     },
     updateFoodFavoriteById: async (params: {
         id: string;
-        group_id:string;
+        group_id: string;
         user_id: string;
         status: boolean;
         remark: string;

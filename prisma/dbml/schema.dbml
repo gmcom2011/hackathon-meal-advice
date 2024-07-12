@@ -4,8 +4,8 @@
 
 Table users {
   id String [pk]
-  username String [unique, not null]
-  password String [not null]
+  username String [unique]
+  password String
   token String
   mobile_phone String
   displayName String
@@ -110,7 +110,7 @@ Table food_allergy {
 Table food_favorite {
   id String [pk]
   group_id String [not null]
-  allergy food_group_master [not null]
+  food_group food_group_master [not null]
   user_id String [not null]
   user users [not null]
   status Boolean [not null, default: true]
